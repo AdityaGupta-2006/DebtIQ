@@ -31,8 +31,8 @@ function Home() {
         </div>
 
         <div className='flex-2 flex justify-center items-center gap-10 whitespace-nowrap'>
-          <p>Sign In</p>
-          <Link to="/dashboard">
+          <p><Link to="/signin">Sign In</Link></p>
+          <Link to="/signup">
             <button className='bg-emerald-950 text-white px-4 py-2 rounded-full hover:bg-emerald-950/90 active:bg-emerald-950/80 transition-all'>
               Get Started
             </button>

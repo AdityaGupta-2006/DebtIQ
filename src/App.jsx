@@ -8,6 +8,9 @@ import LoanManager from './pages/LoanManager'
 import Calender from './pages/Calender'
 import Navbar from './components/Navbar'
 import MainLayout from './components/MainLayout'
+import SignIn from './pages/SignIn'
+import SignUp from './pages/SignUp'
+import Support from './pages/Support'
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
@@ -15,6 +18,9 @@ function App() {
     <div className="min-h-screen bg-gray-100">
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/signin" element={<SignIn/>}/>
+        <Route path="/signup" element={<SignUp/>}/>
+        <Route path='/support' element={<Support/>}/>
         <Route element={<MainLayout 
               isSidebarOpen={isSidebarOpen} 
               setIsSidebarOpen={setIsSidebarOpen}/>
