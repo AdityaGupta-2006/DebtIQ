@@ -4,11 +4,9 @@ import { Link, useNavigate } from "react-router-dom"
 function SignIn() {
   const navigate = useNavigate();
   
-  // State for form inputs
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Simple Email Regex for validation
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
@@ -16,9 +14,9 @@ function SignIn() {
   };
 
   const handleSignIn = (e) => {
-    e.preventDefault(); // Prevent form reload
+    e.preventDefault(); 
     
-    // Check criteria: Valid email and Password length >= 6
+  
     if (validateEmail(email) && password.length >= 6) {
       navigate("/dashboard");
     } else {
