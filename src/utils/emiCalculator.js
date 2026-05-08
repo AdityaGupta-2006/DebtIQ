@@ -1,35 +1,19 @@
-/**
- * EMI Calculator Utility
- * Calculates monthly EMI using standard financial formula
- */
-
-/**
- * Calculate monthly EMI
- * @param {number} principal - Loan principal amount
- * @param {number} annualRate - Annual interest rate in percentage
- * @param {number} months - Loan duration in months
- * @returns {object} - EMI details
- */
 export function calculateEMI(principal, annualRate, months) {
-  // Input validation
   if (principal <= 0 || annualRate < 0 || months <= 0) {
     throw new Error('Invalid input: Principal must be > 0, rate >= 0, months > 0');
   }
 
-  // Handle zero interest rate (simple division)
   if (annualRate === 0) {
     const emi = principal / months;
     return {
-      monthlyEMI: Math.round(emi * 100) / 100, // Round to 2 decimal places
+      monthlyEMI: Math.round(emi * 100) / 100,
       totalAmount: principal,
       totalInterest: 0
     };
   }
 
-  // Convert annual rate to monthly decimal
   const monthlyRate = (annualRate / 12) / 100;
 
-  // EMI formula: EMI = [P x R x (1+R)^N] / [(1+R)^N - 1]
   const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) /
               (Math.pow(1 + monthlyRate, months) - 1);
 
@@ -44,11 +28,6 @@ export function calculateEMI(principal, annualRate, months) {
   };
 }
 
-/**
- * Validate loan input data
- * @param {object} loanData - Loan data to validate
- * @returns {boolean} - True if valid
- */
 export function validateLoanData(loanData) {
   const { name, principal, annualRate, months, startDate, lender } = loanData;
 

@@ -1,7 +1,3 @@
-/**
- * EMI Calculator Utility (Backend)
- */
-
 function calculateEMI(principal, annualRate, months) {
   if (principal <= 0 || annualRate < 0 || months <= 0) {
     throw new Error('Invalid input: Principal must be > 0, rate >= 0, months > 0');

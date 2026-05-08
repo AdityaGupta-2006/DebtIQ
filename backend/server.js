@@ -8,12 +8,11 @@ const { calculateEMI } = require('./emiCalculator');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const JWT_SECRET = 'debtiq-super-secret-key'; // In production, use environment variables
+const JWT_SECRET = 'debtiq-super-secret-key';
 
 app.use(cors());
 app.use(express.json());
 
-// Middleware to verify JWT
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -27,9 +26,6 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// --- AUTH ROUTES ---
-
-// Signup
 app.post('/api/auth/signup', async (req, res) => {
     const { username, email, password } = req.body;
     
@@ -54,7 +50,6 @@ app.post('/api/auth/signup', async (req, res) => {
     });
 });
 
-// Login
 app.post('/api/auth/login', (req, res) => {
     const { email, password } = req.body;
 
@@ -75,9 +70,6 @@ app.post('/api/auth/login', (req, res) => {
     });
 });
 
-// --- LOAN ROUTES ---
-
-// Get all loans for current user
 app.get('/api/loans', authenticateToken, (req, res) => {
     const query = `SELECT * FROM loans WHERE user_id = ? ORDER BY created_at DESC`;
     db.all(query, [req.user.id], (err, rows) => {
@@ -86,7 +78,6 @@ app.get('/api/loans', authenticateToken, (req, res) => {
     });
 });
 
-// Create new loan
 app.post('/api/loans', authenticateToken, (req, res) => {
     const { name, principal, annualRate, months, startDate, lender } = req.body;
 
@@ -116,7 +107,6 @@ app.post('/api/loans', authenticateToken, (req, res) => {
     }
 });
 
-// Delete loan
 app.delete('/api/loans/:id', authenticateToken, (req, res) => {
     const query = `DELETE FROM loans WHERE id = ? AND user_id = ?`;
     db.run(query, [req.params.id, req.user.id], function(err) {
@@ -126,7 +116,6 @@ app.delete('/api/loans/:id', authenticateToken, (req, res) => {
     });
 });
 
-// Get statistics
 app.get('/api/loans/stats', authenticateToken, (req, res) => {
     const query = `
         SELECT 
@@ -141,7 +130,6 @@ app.get('/api/loans/stats', authenticateToken, (req, res) => {
     db.get(query, [req.user.id], (err, row) => {
         if (err) return res.status(500).json({ error: err.message });
         
-        // Handle nulls for empty tables
         const stats = {
             totalLoans: row.totalLoans || 0,
             activeLoans: row.activeLoans || 0,

@@ -70,7 +70,6 @@ const LoanManager = () => {
         lender: formData.lender
       });
 
-      // Reset form
       setFormData({
         name: '',
         principal: '',
@@ -205,7 +204,7 @@ const LoanManager = () => {
                 <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-emerald-950 rounded-full transition-all duration-700"
-                    style={{ width: `35%` }} // Mock progress for now
+                    style={{ width: `35%` }}
                   ></div>
                 </div>
               </div>
