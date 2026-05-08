@@ -7,7 +7,6 @@ export const useLoanManager = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch all loans
   const fetchLoans = useCallback(async (sortBy = null) => {
     setLoading(true);
     setError(null);
@@ -24,7 +23,6 @@ export const useLoanManager = () => {
     }
   }, []);
 
-  // Fetch stats
   const fetchStats = useCallback(async () => {
     setError(null);
     try {
@@ -37,13 +35,11 @@ export const useLoanManager = () => {
     }
   }, []);
 
-  // Create loan
   const createLoan = useCallback(async (loanData) => {
     setError(null);
     try {
       const response = await loanAPI.createLoan(loanData);
       if (response.success) {
-        // Refresh loans list
         await fetchLoans();
         await fetchStats();
         return response.data;
@@ -54,7 +50,6 @@ export const useLoanManager = () => {
     }
   }, [fetchLoans, fetchStats]);
 
-  // Update loan
   const updateLoan = useCallback(async (id, loanData) => {
     setError(null);
     try {
@@ -70,7 +65,6 @@ export const useLoanManager = () => {
     }
   }, [fetchLoans, fetchStats]);
 
-  // Delete loan
   const deleteLoan = useCallback(async (id) => {
     setError(null);
     try {
@@ -86,7 +80,6 @@ export const useLoanManager = () => {
     }
   }, [fetchLoans, fetchStats]);
 
-  // Fetch data on mount
   useEffect(() => {
     fetchLoans();
     fetchStats();

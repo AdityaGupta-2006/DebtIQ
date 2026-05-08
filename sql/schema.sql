@@ -1,6 +1,3 @@
--- DebtIQ Database Schema
-
--- Users table for authentication
 CREATE TABLE IF NOT EXISTS users (
     id TEXT PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
@@ -9,7 +6,6 @@ CREATE TABLE IF NOT EXISTS users (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Loans table for tracking debts
 CREATE TABLE IF NOT EXISTS loans (
     id TEXT PRIMARY KEY,
     user_id TEXT NOT NULL,

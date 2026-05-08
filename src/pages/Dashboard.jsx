@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Plus,
   Home,
@@ -21,6 +21,7 @@ import {
 } from "recharts";
 import { useLoanManager } from '../hooks/useLoanManager';
 import { authAPI } from '../services/api';
+import { clampDayOfMonth, monthDiff, parseISODateLocal } from '../utils/date';
 
 
 function Dashboard() {
@@ -32,7 +33,7 @@ function Dashboard() {
     type: 'Personal',
     amount: '',
     rate: '',
-    months: '', // Changed duration to months to match backend
+    months: '',
     startDate: new Date().toISOString().split('T')[0]
   });
 
@@ -45,13 +46,14 @@ function Dashboard() {
   ];
 
   const now = new Date();
+  const currentMonthIndex = now.getMonth();
 
   const monthNames = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
   ];
 
-  const currentMonth = monthNames[now.getMonth()];
+  const currentMonth = monthNames[currentMonthIndex];
   const currentYear = now.getFullYear();
   const todayDate = now.getDate();
 
@@ -88,6 +90,26 @@ function Dashboard() {
   };
 
   const calendarDays = getCalendarDays();
+
+  const dueDaysThisMonth = useMemo(() => {
+    const set = new Set();
+    const monthAnchor = new Date(currentYear, currentMonthIndex, 1);
+
+    for (const loan of backendLoans || []) {
+      const startISO = loan.start_date || loan.startDate;
+      const startDate = parseISODateLocal(startISO);
+      const months = Number(loan.months);
+      if (!startDate || !Number.isFinite(months) || months <= 0) continue;
+
+      const diff = monthDiff(monthAnchor, new Date(startDate.getFullYear(), startDate.getMonth(), 1));
+      if (diff < 0 || diff >= months) continue;
+
+      const dueDay = clampDayOfMonth(currentYear, currentMonthIndex, startDate.getDate());
+      set.add(dueDay);
+    }
+
+    return set;
+  }, [backendLoans, currentMonthIndex, currentYear]);
 
   const getIcon = (type) => {
 
@@ -480,6 +502,10 @@ function Dashboard() {
                   item.currentMonth &&
                   item.day === todayDate;
 
+                const isDue =
+                  item.currentMonth &&
+                  dueDaysThisMonth.has(item.day);
+
                 return (
                   <div
                     key={i}
@@ -491,6 +517,8 @@ function Dashboard() {
                         h-8 w-8 rounded-lg flex items-center justify-center text-xs font-bold
                         ${isToday
                           ? "bg-green-950 text-white"
+                          : isDue
+                          ? "bg-slate-200 text-slate-800"
                           : "text-slate-600"}
                       `}
                     >

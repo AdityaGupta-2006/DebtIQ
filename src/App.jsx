@@ -12,7 +12,6 @@ import SignUp from './pages/SignUp'
 import Support from './pages/Support'
 import { authAPI } from './services/api'
 
-// Protected Route component
 const ProtectedRoute = ({ children }) => {
   const user = authAPI.getCurrentUser();
   return user ? children : <Navigate to="/signin" replace />;
@@ -29,7 +28,6 @@ function App() {
         <Route path="/signup" element={<SignUp/>}/>
         <Route path='/support' element={<Support/>}/>
         
-        {/* Protected Routes */}
         <Route element={
           <ProtectedRoute>
             <MainLayout 
@@ -44,7 +42,6 @@ function App() {
           <Route path="/calendar" element={<Calender />} />
         </Route>
         
-        {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>

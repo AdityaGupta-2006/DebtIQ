@@ -4,7 +4,6 @@ const fs = require('fs');
 
 const DB_PATH = path.join(__dirname, 'data', 'database.sqlite');
 
-// Ensure data directory exists
 if (!fs.existsSync(path.join(__dirname, 'data'))) {
     fs.mkdirSync(path.join(__dirname, 'data'));
 }
